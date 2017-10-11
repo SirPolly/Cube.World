@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Core;
 
 public class DayNightSystem : MonoBehaviour, IDayNightSystem
 {
@@ -13,22 +14,26 @@ public class DayNightSystem : MonoBehaviour, IDayNightSystem
     }
 
     public bool fixedDayTime = false;
-    
-    IWorld _world;
 
-    void Start()
+    ITimeSystem _timeSystem;
+
+    void Awake()
     {
-        _world = GetComponentInParent<IWorld>();
-        _world.dayNightSystem = this;
+        SystemProvider.SetSystem<IDayNightSystem>(gameObject, this);
     }
 
     void Update()
     {
-        if (_world.timeSystem == null || fixedDayTime)
+        if (fixedDayTime)
             return;
 
+        if (_timeSystem == null) {
+            _timeSystem = SystemProvider.GetSystem<ITimeSystem>(gameObject);
+            return;
+        }
+
         var initialTimeOffset = DayLengthTime;
-        var time = initialTimeOffset + _world.timeSystem.time;
+        var time = initialTimeOffset + _timeSystem.time;
         var localTime = time - Mathf.Floor(time / DayLengthTime) * DayLengthTime;
         _dayPercentage = localTime / DayLengthTime;
     }

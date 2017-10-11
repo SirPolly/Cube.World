@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Core;
 
 public class Sky : MonoBehaviour
 {
@@ -22,16 +23,16 @@ public class Sky : MonoBehaviour
     [SerializeField]
     AnimationCurve _nightAtmosphereThickness;
 
-    IWorld _world;
+    IDayNightSystem _dayNightSystem;
 
     void Start()
     {
-        _world = GetComponentInParent<IWorld>();
+        _dayNightSystem = SystemProvider.GetSystem<IDayNightSystem>(gameObject);
     }
 
     void Update()
     {
-        var dayPercentage = _world.dayNightSystem.dayPercentage;
+        var dayPercentage = _dayNightSystem.dayPercentage;
 
         Color sunColor, skyTint;
         float atmosphereThickness;
