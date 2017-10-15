@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Core;
 
 /// <summary>
 /// Apply this to all GameObject with a Rigidbody and a MeshCollider you want to float in water.
@@ -19,18 +20,19 @@ public class Buoyancy : MonoBehaviour
     List<Vector3> _voxels;
     bool _isMeshCollider;
     List<Vector3[]> _forces = new List<Vector3[]>(); // For drawing force gizmos
-
-    IWorld _world;
+    
     Rigidbody _rigidBody;
     Collider _collider;
     MeshCollider _meshCollider;
 
+    IWaterSystem _waterSystem;
+
     void Start()
     {
-        _world = GetComponentInParent<IWorld>();
         _rigidBody = GetComponent<Rigidbody>();
         _collider = GetComponent<Collider>();
         _meshCollider = GetComponent<MeshCollider>();
+        _waterSystem = SystemProvider.GetSystem<IWaterSystem>(gameObject);
 
         var originalRotation = transform.rotation;
         var originalPosition = transform.position;
@@ -183,13 +185,10 @@ public class Buoyancy : MonoBehaviour
     void FixedUpdate()
     {
         _forces.Clear();// For drawing force gizmos
-
-        if (_world.waterSystem == null)
-            return;
-
+        
         foreach (var point in _voxels) {
             var wp = transform.TransformPoint(point);
-            float waterLevel = _world.waterSystem.GetHeight(wp.x, wp.z);
+            float waterLevel = _waterSystem.GetHeight(wp.x, wp.z);
 
             if (wp.y - _voxelHalfHeight < waterLevel) {
                 float k = (waterLevel - wp.y) / (2 * _voxelHalfHeight) + 0.5f;
