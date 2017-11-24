@@ -117,9 +117,9 @@ public class DetailSystem : MonoBehaviour {
 
             PhysicMaterial material;
 
-            var terrainMaterials = hitInfo.collider.GetComponent<TerrainMaterials>();
-            if (terrainMaterials != null) {
-                material = terrainMaterials.GetPhysicMaterialForPosition(hitInfo.point);
+            var terrainSurfaces = hitInfo.collider.GetComponent<TerrainSurfaces>();
+            if (terrainSurfaces != null) {
+                material = terrainSurfaces.GetPhysicMaterialForPosition(hitInfo.point);
             }
             else {
                 material = hitInfo.collider.sharedMaterial;
