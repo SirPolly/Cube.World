@@ -5,7 +5,7 @@ using UnityEngine;
 public static class TerrainSplatmap {
     static string _lastFolder = "";
 
-    [MenuItem("UnityCore/Terrain/Export Splatmap...")]
+    [MenuItem("Core/Terrain/Export Splatmap...")]
     static void CreatePNG() {
         var texture1 = Selection.activeObject as Texture2D; 
         if (texture1 == null) {
@@ -39,7 +39,7 @@ public static class TerrainSplatmap {
         AssetDatabase.Refresh();
     }
 
-    [MenuItem("UnityCore/Terrain/Import Splatmap...")]
+    [MenuItem("Core/Terrain/Import Splatmap...")]
     static void Replace() {
         var rawTexture = Selection.activeObject as Texture2D; 
         if (rawTexture == null) { 
