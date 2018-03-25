@@ -1,0 +1,9 @@
+{
+    "name": "Cube.World",
+    "references": [
+        "Cube.Core",
+        "Cube.Gameplay"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": []
+}
