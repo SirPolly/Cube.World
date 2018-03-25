@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public interface IWaterSystem
+﻿namespace Cube.World
 {
-    float GetHeight(float x, float z);
+    public interface IWaterSystem
+    {
+        float GetHeight(float x, float z);
+    }
 }

@@ -14,7 +14,7 @@ namespace Cube.World
             get { return _dayPercentage; }
         }
         
-        ITimeSystem _timeSystem;
+        TimeSystem _timeSystem;
 
         void Awake()
         {
@@ -24,7 +24,7 @@ namespace Cube.World
         void Update()
         {
             if (_timeSystem == null) {
-                _timeSystem = SystemProvider.GetSystem<ITimeSystem>(gameObject);
+                _timeSystem = SystemProvider.GetSystem<TimeSystem>(gameObject);
                 return;
             }
 
