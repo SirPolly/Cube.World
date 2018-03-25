@@ -2,7 +2,8 @@
     "name": "Cube.World",
     "references": [
         "Cube.Core",
-        "Cube.Gameplay"
+        "Cube.Gameplay",
+        "Cube.Networking"
     ],
     "includePlatforms": [],
     "excludePlatforms": []
