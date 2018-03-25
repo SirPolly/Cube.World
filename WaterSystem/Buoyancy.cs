@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Cube.World
 {
@@ -21,7 +22,9 @@ namespace Cube.World
         Vector3 _localArchimedesForce;
         List<Vector3> _voxels;
         bool _isMeshCollider;
+#if UNITY_EDITOR
         List<Vector3[]> _forces = new List<Vector3[]>(); // For drawing force gizmos
+#endif
 
         Rigidbody _rigidBody;
         Collider _collider;
@@ -33,7 +36,10 @@ namespace Cube.World
         {
             _rigidBody = GetComponent<Rigidbody>();
             _collider = GetComponent<Collider>();
+
             _meshCollider = GetComponent<MeshCollider>();
+            Assert.IsNotNull(_meshCollider);
+
             _waterSystem = gameObject.GetSystem<IWaterSystem>();
 
             var originalRotation = transform.rotation;
@@ -186,7 +192,9 @@ namespace Cube.World
 
         void FixedUpdate()
         {
+#if UNITY_EDITOR
             _forces.Clear();// For drawing force gizmos
+#endif
 
             foreach (var point in _voxels) {
                 var wp = transform.TransformPoint(point);
@@ -206,14 +214,17 @@ namespace Cube.World
                     var force = localDampingForce + Mathf.Sqrt(k) * _localArchimedesForce;
                     _rigidBody.AddForceAtPosition(force, wp);
 
+#if UNITY_EDITOR
                     _forces.Add(new[] { wp, force }); // For drawing force gizmos
+#endif
                 }
             }
         }
 
+#if UNITY_EDITOR
         void OnDrawGizmosSelected()
         {
-            if (_voxels == null || _forces == null)
+            if (_voxels == null || _forces == null || _rigidBody == null)
                 return;
 
             const float gizmoSize = 0.05f;
@@ -234,5 +245,6 @@ namespace Cube.World
 
             Gizmos.DrawWireSphere(transform.position + _rigidBody.centerOfMass, 0.2f);
         }
+#endif
     }
 }
