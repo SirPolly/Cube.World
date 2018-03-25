@@ -1,40 +1,37 @@
-﻿using UnityEngine;
-using Core;
+﻿using Cube.Gameplay;
+using UnityEngine;
 
-public class DayNightSystem : MonoBehaviour, IDayNightSystem
+namespace Cube.World
 {
-    [Range(1f, 1000f)]
-    public float DayLengthTime;
-
-    [Range(0f, 1f)]
-    [SerializeField]
-    float _dayPercentage = 0f;
-    public float dayPercentage {
-        get { return _dayPercentage; }
-    }
-
-    public bool fixedDayTime = false;
-
-    ITimeSystem _timeSystem;
-
-    void Awake()
+    public class DayNightSystem : MonoBehaviour, IDayNightSystem
     {
-        SystemProvider.SetSystem<IDayNightSystem>(gameObject, this);
-    }
+        public DayNightSettings settings;
 
-    void Update()
-    {
-        if (fixedDayTime)
-            return;
+        [Range(0f, 1f)]
+        [SerializeField]
+        float _dayPercentage = 0f;
+        public float dayPercentage {
+            get { return _dayPercentage; }
+        }
+        
+        ITimeSystem _timeSystem;
 
-        if (_timeSystem == null) {
-            _timeSystem = SystemProvider.GetSystem<ITimeSystem>(gameObject);
-            return;
+        void Awake()
+        {
+            gameObject.SetSystem<IDayNightSystem>(this);
         }
 
-        var initialTimeOffset = DayLengthTime;
-        var time = initialTimeOffset + _timeSystem.time;
-        var localTime = time - Mathf.Floor(time / DayLengthTime) * DayLengthTime;
-        _dayPercentage = localTime / DayLengthTime;
+        void Update()
+        {
+            if (_timeSystem == null) {
+                _timeSystem = SystemProvider.GetSystem<ITimeSystem>(gameObject);
+                return;
+            }
+
+            var initialTimeOffset = settings.dayLengthInSeconds;
+            var time = initialTimeOffset + _timeSystem.time;
+            var localTime = time - Mathf.Floor(time / settings.dayLengthInSeconds) * settings.dayLengthInSeconds;
+            _dayPercentage = localTime / settings.dayLengthInSeconds;
+        }
     }
 }

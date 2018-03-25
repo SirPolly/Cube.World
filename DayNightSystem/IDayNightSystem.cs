@@ -1,5 +1,10 @@
-﻿
-public interface IDayNightSystem
+﻿namespace Cube.World
 {
-    float dayPercentage { get; }
+    public interface IDayNightSystem
+    {
+        /// <summary>
+        /// Current percentage of the day in the range [0,1].
+        /// </summary>
+        float dayPercentage { get; }
+    }
 }
