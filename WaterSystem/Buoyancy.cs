@@ -6,6 +6,7 @@ namespace Cube.World
     /// <summary>
     /// Apply this to all GameObject with a Rigidbody and a MeshCollider you want to float in water.
     /// </summary>
+    [AddComponentMenu("Cube.World/Buoyancy")]
     public class Buoyancy : MonoBehaviour
     {
         public float density = 500;
@@ -33,7 +34,7 @@ namespace Cube.World
             _rigidBody = GetComponent<Rigidbody>();
             _collider = GetComponent<Collider>();
             _meshCollider = GetComponent<MeshCollider>();
-            _waterSystem = SystemProvider.GetSystem<IWaterSystem>(gameObject);
+            _waterSystem = gameObject.GetSystem<IWaterSystem>();
 
             var originalRotation = transform.rotation;
             var originalPosition = transform.position;
