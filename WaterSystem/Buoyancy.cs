@@ -27,18 +27,15 @@ namespace Cube.World
 #endif
 
         Rigidbody _rigidBody;
-        Collider _collider;
-        MeshCollider _meshCollider;
+        public MeshCollider meshCollider;
 
         IWaterSystem _waterSystem;
 
         void Start()
         {
             _rigidBody = GetComponent<Rigidbody>();
-            _collider = GetComponent<Collider>();
-
-            _meshCollider = GetComponent<MeshCollider>();
-            Assert.IsNotNull(_meshCollider);
+            
+            Assert.IsNotNull(meshCollider);
 
             _waterSystem = gameObject.GetSystem<IWaterSystem>();
 
@@ -46,15 +43,10 @@ namespace Cube.World
             var originalPosition = transform.position;
             transform.rotation = Quaternion.identity;
             transform.position = Vector3.zero;
+            
+            _isMeshCollider = meshCollider != null;
 
-            // The object must have a collider
-            if (_collider == null) {
-                //            Debug.LogWarning(string.Format("[Buoyancy.cs] Object \"{0}\" had no collider.", name));
-                enabled = false;
-            }
-            _isMeshCollider = _meshCollider != null;
-
-            var bounds = _collider.bounds;
+            var bounds = meshCollider.bounds;
             if (bounds.size.x < bounds.size.y) {
                 _voxelHalfHeight = bounds.size.x;
             }
@@ -91,13 +83,13 @@ namespace Cube.World
             var points = new List<Vector3>(slicesPerAxis * slicesPerAxis * slicesPerAxis);
 
             if (concave) {
-                var meshC = _meshCollider;
+                var meshC = meshCollider;
 
                 var convexValue = meshC.convex;
                 meshC.convex = false;
 
                 // Concave slicing
-                var bounds = _collider.bounds;
+                var bounds = meshCollider.bounds;
                 for (int ix = 0; ix < slicesPerAxis; ix++) {
                     for (int iy = 0; iy < slicesPerAxis; iy++) {
                         for (int iz = 0; iz < slicesPerAxis; iz++) {
@@ -121,7 +113,7 @@ namespace Cube.World
             }
             else {
                 // Convex slicing
-                var bounds = _collider.bounds;
+                var bounds = meshCollider.bounds;
                 for (int ix = 0; ix < slicesPerAxis; ix++) {
                     for (int iy = 0; iy < slicesPerAxis; iy++) {
                         for (int iz = 0; iz < slicesPerAxis; iz++) {
