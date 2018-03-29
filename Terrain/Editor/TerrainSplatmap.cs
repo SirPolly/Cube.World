@@ -5,12 +5,12 @@ using UnityEngine;
 public static class TerrainSplatmap {
     static string _lastFolder = "";
 
-    [MenuItem("Core/Terrain/Export Splatmap...")]
+    [MenuItem("Cube/Terrain/Export Splatmap...")]
     static void CreatePNG() {
-        var texture1 = Selection.activeObject as Texture2D; 
+        var texture1 = Selection.activeObject as Texture2D;
         if (texture1 == null) {
-            EditorUtility.DisplayDialog("Select A Splatmap", "You need to select the terrain texture first (a child of your terrain asset).", "OK"); 
-            return; 
+            EditorUtility.DisplayDialog("Select A Splatmap", "You need to select the terrain texture first (a child of your terrain asset).", "OK");
+            return;
         }
 
         var path = EditorUtility.SaveFilePanelInProject("Save Splatmap as PNG", "splatmap-to-png", "png", "Select the location to save the new PNG splatmap.", _lastFolder);
@@ -39,12 +39,12 @@ public static class TerrainSplatmap {
         AssetDatabase.Refresh();
     }
 
-    [MenuItem("Core/Terrain/Import Splatmap...")]
+    [MenuItem("Cube/Terrain/Import Splatmap...")]
     static void Replace() {
-        var rawTexture = Selection.activeObject as Texture2D; 
-        if (rawTexture == null) { 
-            EditorUtility.DisplayDialog("Select The Splatmap", "You need to select the terrain's splatmap from your asset folder first (a child of your terrain asset).", "OK"); 
-            return; 
+        var rawTexture = Selection.activeObject as Texture2D;
+        if (rawTexture == null) {
+            EditorUtility.DisplayDialog("Select The Splatmap", "You need to select the terrain's splatmap from your asset folder first (a child of your terrain asset).", "OK");
+            return;
         }
 
         //
@@ -61,20 +61,20 @@ public static class TerrainSplatmap {
 
         if (bakedTexture.format != TextureFormat.ARGB32 && rawTexture.format != TextureFormat.RGB24) {
             var newTexture = new Texture2D(bakedTexture.width, bakedTexture.height);
-            newTexture.SetPixels(bakedTexture.GetPixels(0),0);
+            newTexture.SetPixels(bakedTexture.GetPixels(0), 0);
             bakedTexture = newTexture;
             bakedTexture.Apply();
         }
-		
+
         var textureColors = bakedTexture.GetPixels();
         for (var i = 0; i < textureColors.Length; ++i) {
             var c = textureColors[i];
             if (c.r != 0f || c.g != 0f || c.b != 0f)
-                textureColors[i].a = 1f - ( c.r + c.g + c.b );
+                textureColors[i].a = 1f - (c.r + c.g + c.b);
             else
                 textureColors[i] = new Color(0f, 0f, 0f, 0f);
         }
-	 
+
         bakedTexture.SetPixels(textureColors);
         bakedTexture.Apply();
 
