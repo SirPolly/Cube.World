@@ -1,0 +1,10 @@
+{
+    "name": "Cube.World.Editor",
+    "references": [
+        "Cube.World"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}
