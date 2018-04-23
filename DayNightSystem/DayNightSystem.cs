@@ -1,10 +1,8 @@
 ﻿using Cube.Gameplay;
 using UnityEngine;
 
-namespace Cube.World
-{
-    public class DayNightSystem : MonoBehaviour, IDayNightSystem
-    {
+namespace Cube.World {
+    public class DayNightSystem : MonoBehaviour, IDayNightSystem {
         public DayNightSettings settings;
 
         [Range(0f, 1f)]
@@ -13,16 +11,14 @@ namespace Cube.World
         public float dayPercentage {
             get { return _dayPercentage; }
         }
-        
+
         TimeSystem _timeSystem;
 
-        void Awake()
-        {
+        void Awake() {
             gameObject.SetSystem<IDayNightSystem>(this);
         }
 
-        void Update()
-        {
+        void Update() {
             if (_timeSystem == null) {
                 _timeSystem = SystemProvider.GetSystem<TimeSystem>(gameObject);
                 return;

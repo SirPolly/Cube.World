@@ -4,12 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cube.Gameplay;
 
-namespace Cube.World
-{
-    public class DetailSystem : MonoBehaviour
-    {
-        class DetailPool
-        {
+namespace Cube.World {
+    public class DetailSystem : MonoBehaviour {
+        class DetailPool {
             public Matrix4x4[] positions;
             public HashSet<IntVector2> positionSet;
         }
@@ -17,13 +14,11 @@ namespace Cube.World
         Dictionary<DetailLayer, DetailPool> _pools = new Dictionary<DetailLayer, DetailPool>();
         Dictionary<DetailCamera, Vector3> _lastCameraPositions = new Dictionary<DetailCamera, Vector3>();
 
-        void Start()
-        {
+        void Start() {
             StartCoroutine(UpdateDetailCameras());
         }
 
-        void Update()
-        {
+        void Update() {
             foreach (var detailCamera in DetailCamera.all) {
                 foreach (var detailLayer in detailCamera.detailLayers) {
                     DetailPool pool;
@@ -35,8 +30,7 @@ namespace Cube.World
             }
         }
 
-        IEnumerator UpdateDetailCameras()
-        {
+        IEnumerator UpdateDetailCameras() {
             yield return new WaitForSeconds(1); // Wait for world to init? Raycasts not working
 
             int iteration = 0;
@@ -49,8 +43,7 @@ namespace Cube.World
             }
         }
 
-        void UpdateDetailCamera(DetailCamera detailCamera, int iteration)
-        {
+        void UpdateDetailCamera(DetailCamera detailCamera, int iteration) {
             var updateDistanceThreshold = 0.1f;
             var updateInitialThreshold = 10;
 
@@ -63,8 +56,7 @@ namespace Cube.World
                     return;
 
                 initialUpdate = moveDirection.sqrMagnitude > updateInitialThreshold;
-            }
-            else {
+            } else {
                 initialUpdate = true;
             }
 
@@ -75,8 +67,7 @@ namespace Cube.World
             }
         }
 
-        void UpdateDetailLayer(DetailCamera detailCamera, DetailLayer detailLayer, Vector3 moveDirection, int iteration, bool initial)
-        {
+        void UpdateDetailLayer(DetailCamera detailCamera, DetailLayer detailLayer, Vector3 moveDirection, int iteration, bool initial) {
             var updateBatchSize = 20;
 
             var offsetDistance = detailLayer.CameraDistance * 0.95f;
@@ -109,8 +100,7 @@ namespace Cube.World
                     var a = Math3d.SignedVectorAngle(Vector3.back, moveDirection, Vector3.up);
                     var a2 = Random.Range(a - 90, a + 90) * Mathf.Deg2Rad;
                     offset = new Vector3(Mathf.Sin(a2) * offsetDistance, offsetY, Mathf.Cos(a2) * offsetDistance);
-                }
-                else {
+                } else {
                     offset = new Vector3(Random.Range(-offsetDistance, offsetDistance), offsetY, Random.Range(-offsetDistance, offsetDistance));
                 }
                 var newPos = detailCamera.transform.position + offset;
@@ -130,8 +120,7 @@ namespace Cube.World
                 var terrainSurfaces = hitInfo.collider.GetComponent<TerrainSurfaces>();
                 if (terrainSurfaces != null) {
                     material = terrainSurfaces.GetPhysicMaterialForPosition(hitInfo.point);
-                }
-                else {
+                } else {
                     material = hitInfo.collider.sharedMaterial;
                 }
 
@@ -147,13 +136,11 @@ namespace Cube.World
             }
         }
 
-        static IntVector2 GetHashPositionForPosition(Vector3 position, float density)
-        {
+        static IntVector2 GetHashPositionForPosition(Vector3 position, float density) {
             return new IntVector2((int)(position.x * density), (int)(position.z * density));
         }
 
-        DetailPool GetOrCreateDetailLayerPool(DetailLayer detailLayer)
-        {
+        DetailPool GetOrCreateDetailLayerPool(DetailLayer detailLayer) {
             DetailPool pool;
             if (_pools.TryGetValue(detailLayer, out pool))
                 return pool;

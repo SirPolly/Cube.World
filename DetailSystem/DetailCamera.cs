@@ -2,23 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DetailCamera : MonoBehaviour {
-    public static List<DetailCamera> all = new List<DetailCamera>();
-    public DetailLayer[] detailLayers;
-    public new Camera camera {
-        get;
-        private set;
-    }
+namespace Cube.World {
+    public class DetailCamera : MonoBehaviour {
+        public static List<DetailCamera> all = new List<DetailCamera>();
+        public DetailLayer[] detailLayers;
+        public new Camera camera {
+            get;
+            private set;
+        }
 
-    void Start() {
-        camera = GetComponent<Camera>();
-    }
+        void Start() {
+            camera = GetComponent<Camera>();
+        }
 
-    void OnEnable() {
-        all.Add(this);
-    }
+        void OnEnable() {
+            all.Add(this);
+        }
 
-    void OnDisable() {
-        all.Remove(this);
+        void OnDisable() {
+            all.Remove(this);
+        }
     }
 }
