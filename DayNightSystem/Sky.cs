@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 
-namespace Cube.World
-{
-    public class Sky : MonoBehaviour
-    {
+namespace Cube.World {
+    public class Sky : MonoBehaviour {
         [SerializeField]
         GameObject _sun;
         [SerializeField]
@@ -26,13 +24,11 @@ namespace Cube.World
 
         IDayNightSystem _dayNightSystem;
 
-        void Start()
-        {
+        void Start() {
             _dayNightSystem = gameObject.GetSystem<IDayNightSystem>();
         }
 
-        void Update()
-        {
+        void Update() {
             var dayPercentage = _dayNightSystem.dayPercentage;
 
             Color sunColor, skyTint;
@@ -44,8 +40,7 @@ namespace Cube.World
                 sunColor = _daySunColor.Evaluate(f);
                 skyTint = _daySkyTintGradient.Evaluate(f);
                 atmosphereThickness = _dayAtmosphereThickness.Evaluate(f);
-            }
-            else {
+            } else {
                 // Night
                 sunRotation -= 180;
 
