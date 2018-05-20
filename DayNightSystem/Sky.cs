@@ -37,17 +37,17 @@ namespace Cube.World {
             if (sunRotation < 180) {
                 // Day
                 var a = dayPercentage * 2;
-                skyTint = _nightSkyTintGradient.Evaluate(a);
-                atmosphereThickness = _nightAtmosphereThickness.Evaluate(a);
-                fog = _nightFogGradient.Evaluate(a);
+                skyTint = _daySkyTintGradient.Evaluate(a);
+                atmosphereThickness = _dayAtmosphereThickness.Evaluate(a);
+                fog = _dayFogGradient.Evaluate(a);
             } else {
                 // Night
                 sunRotation -= 180;
 
                 var a = (dayPercentage - 0.5f) * 2;
-                skyTint = _daySkyTintGradient.Evaluate(a);
-                atmosphereThickness = _dayAtmosphereThickness.Evaluate(a);
-                fog = _dayFogGradient.Evaluate(a);
+                skyTint = _nightSkyTintGradient.Evaluate(a);
+                atmosphereThickness = _nightAtmosphereThickness.Evaluate(a);
+                fog = _nightFogGradient.Evaluate(a);
             }
 
             _skyMaterial.SetColor("_SkyTint", skyTint);
