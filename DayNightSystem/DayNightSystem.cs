@@ -16,9 +16,17 @@ namespace Cube.World {
 
         void Awake() {
             gameObject.SetSystem<IDayNightSystem>(this);
+
+#if UNITY_EDITOR
+            _dayPercentage = 0.3f;
+#endif
         }
 
         void Update() {
+#if UNITY_EDITOR
+            return;
+#endif
+
             if (_timeSystem == null) {
                 _timeSystem = SystemProvider.GetSystem<TimeSystem>(gameObject);
                 return;
