@@ -1,25 +1,22 @@
 ﻿using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Cube.World {
     [AddComponentMenu("Cube.World/Sky")]
     public class Sky : MonoBehaviour {
-        [SerializeField]
-        Material _skyMaterial;
+        public Material skyMaterial;
         
-        [SerializeField]
-        Gradient _daySkyTintGradient;
-        [SerializeField]
-        Gradient _nightSkyTintGradient;
+        public Gradient daySkyTintGradient;
+        public Gradient nightSkyTintGradient;
+        
+        public AnimationCurve dayAtmosphereThickness;
+        public AnimationCurve nightAtmosphereThickness;
+        
+        public Gradient dayFogGradient;
+        public Gradient nightFogGradient;
 
-        [SerializeField]
-        AnimationCurve _dayAtmosphereThickness;
-        [SerializeField]
-        AnimationCurve _nightAtmosphereThickness;
-
-        [SerializeField]
-        Gradient _dayFogGradient;
-        [SerializeField]
-        Gradient _nightFogGradient;
+        public AnimationCurve dayAmbientLightIntensity;
+        public AnimationCurve nightAmbientLightIntensity;
 
         IDayNightSystem _dayNightSystem;
 
@@ -33,27 +30,32 @@ namespace Cube.World {
             Color skyTint;
             float atmosphereThickness;
             Color fog;
+            float ambientIntensity;
+
             var sunRotation = dayPercentage * 360;
             if (sunRotation < 180) {
                 // Day
                 var a = dayPercentage * 2;
-                skyTint = _daySkyTintGradient.Evaluate(a);
-                atmosphereThickness = _dayAtmosphereThickness.Evaluate(a);
-                fog = _dayFogGradient.Evaluate(a);
+                skyTint = daySkyTintGradient.Evaluate(a);
+                atmosphereThickness = dayAtmosphereThickness.Evaluate(a);
+                fog = dayFogGradient.Evaluate(a);
+                ambientIntensity = dayAmbientLightIntensity.Evaluate(a);
             } else {
                 // Night
                 sunRotation -= 180;
 
                 var a = (dayPercentage - 0.5f) * 2;
-                skyTint = _nightSkyTintGradient.Evaluate(a);
-                atmosphereThickness = _nightAtmosphereThickness.Evaluate(a);
-                fog = _nightFogGradient.Evaluate(a);
+                skyTint = nightSkyTintGradient.Evaluate(a);
+                atmosphereThickness = nightAtmosphereThickness.Evaluate(a);
+                fog = nightFogGradient.Evaluate(a);
+                ambientIntensity = nightAmbientLightIntensity.Evaluate(a);
             }
 
-            _skyMaterial.SetColor("_SkyTint", skyTint);
-            _skyMaterial.SetFloat("_AtmosphereThickness", atmosphereThickness);
+            skyMaterial.SetColor("_SkyTint", skyTint);
+            skyMaterial.SetFloat("_AtmosphereThickness", atmosphereThickness);
 
             RenderSettings.fogColor = fog;
+            RenderSettings.ambientIntensity = ambientIntensity;
         }
     }
 }
