@@ -5,6 +5,10 @@ namespace Cube.World {
     public class DayNightSystem : MonoBehaviour, IDayNightSystem {
         public DayNightSettings settings;
 
+        public bool isNight {
+            get { return _dayPercentage > 0.5f; }
+        }
+
         [Range(0f, 1f)]
         [SerializeField]
         float _dayPercentage = 0f;
