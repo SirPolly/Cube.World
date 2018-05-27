@@ -22,13 +22,16 @@ namespace Cube.World {
             gameObject.SetSystem<IDayNightSystem>(this);
 
 #if UNITY_EDITOR
-            _dayPercentage = 0.3f;
+            if (settings.disableInEditor) {
+                _dayPercentage = 0.3f;
+            }
 #endif
         }
 
         void Update() {
 #if UNITY_EDITOR
-            return;
+            if (settings.disableInEditor)
+                return;
 #endif
 
             if (_timeSystem == null) {
