@@ -18,10 +18,15 @@ namespace Cube.World {
         public AnimationCurve dayAmbientLightIntensity;
         public AnimationCurve nightAmbientLightIntensity;
 
+        public AnimationCurve dayReflectionIntensity;
+        public AnimationCurve nightReflectionIntensity;
+
         IDayNightSystem _dayNightSystem;
+        float _baseFogDensity;
 
         void Start() {
             _dayNightSystem = gameObject.GetSystem<IDayNightSystem>();
+            _baseFogDensity = RenderSettings.fogDensity;
         }
 
         void Update() {
@@ -31,6 +36,7 @@ namespace Cube.World {
             float atmosphereThickness;
             Color fog;
             float ambientIntensity;
+            float ri;
 
             var sunRotation = dayPercentage * 360;
             if (sunRotation < 180) {
@@ -40,6 +46,7 @@ namespace Cube.World {
                 atmosphereThickness = dayAtmosphereThickness.Evaluate(a);
                 fog = dayFogGradient.Evaluate(a);
                 ambientIntensity = dayAmbientLightIntensity.Evaluate(a);
+                ri = dayReflectionIntensity.Evaluate(a);
             } else {
                 // Night
                 sunRotation -= 180;
@@ -49,13 +56,16 @@ namespace Cube.World {
                 atmosphereThickness = nightAtmosphereThickness.Evaluate(a);
                 fog = nightFogGradient.Evaluate(a);
                 ambientIntensity = nightAmbientLightIntensity.Evaluate(a);
+                ri = nightReflectionIntensity.Evaluate(a);
             }
 
             skyMaterial.SetColor("_SkyTint", skyTint);
             skyMaterial.SetFloat("_AtmosphereThickness", atmosphereThickness);
 
             RenderSettings.fogColor = fog;
+            RenderSettings.fogDensity = fog.a * _baseFogDensity;
             RenderSettings.ambientIntensity = ambientIntensity;
+            RenderSettings.reflectionIntensity = ri;
         }
     }
 }
