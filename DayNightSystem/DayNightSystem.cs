@@ -40,7 +40,7 @@ namespace Cube.World {
 
             if (_gameStateSystem.current == null)
                 return;
-            
+
             var initialTimeOffset = settings.dayLengthInSeconds;
             var time = initialTimeOffset + _gameStateSystem.current.time;
             var localTime = time - Mathf.Floor(time / settings.dayLengthInSeconds) * settings.dayLengthInSeconds;
