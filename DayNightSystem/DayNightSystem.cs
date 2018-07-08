@@ -16,7 +16,7 @@ namespace Cube.World {
             get { return _dayPercentage; }
         }
 
-        TimeSystem _timeSystem;
+        GameStateSystem _gameStateSystem;
 
         void Awake() {
             gameObject.SetSystem<IDayNightSystem>(this);
@@ -28,19 +28,21 @@ namespace Cube.World {
 #endif
         }
 
+        void Start() {
+            _gameStateSystem = gameObject.GetSystem<GameStateSystem>();
+        }
+
         void Update() {
 #if UNITY_EDITOR
             if (settings.disableInEditor)
                 return;
 #endif
 
-            if (_timeSystem == null) {
-                _timeSystem = SystemProvider.GetSystem<TimeSystem>(gameObject);
+            if (_gameStateSystem.current == null)
                 return;
-            }
-
+            
             var initialTimeOffset = settings.dayLengthInSeconds;
-            var time = initialTimeOffset + _timeSystem.time;
+            var time = initialTimeOffset + _gameStateSystem.current.time;
             var localTime = time - Mathf.Floor(time / settings.dayLengthInSeconds) * settings.dayLengthInSeconds;
             _dayPercentage = localTime / settings.dayLengthInSeconds;
         }
